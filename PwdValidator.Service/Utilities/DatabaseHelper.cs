@@ -109,13 +109,16 @@ namespace MCMSPasswordValidator.Utilities
             
             var hashInfo = new HashInfo();
 
-            sqlStatement = $"SELECT hash, countOccurence FROM PasswordHash WHERE hash = '{hashValue}'";
+            sqlStatement = $"SELECT hash, countOccurrence FROM PasswordHash WHERE hash = '{hashValue}'";
 
             cmd.CommandText = sqlStatement;
             using (var reader = cmd.ExecuteReader())
             {
-                hashInfo.HashValue = reader.GetValue(0).ToString();
-                hashInfo.Count = (short)reader.GetValue(1);
+                if (reader.Read())
+                {
+                    hashInfo.HashValue = reader.GetValue(0).ToString();
+                    hashInfo.Count = (short) reader.GetValue(1);
+                }
             }
             
             CloseConnection();

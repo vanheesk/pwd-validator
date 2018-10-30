@@ -29,15 +29,12 @@ namespace MCMSPasswordValidator.Controllers
         public ActionResult<HashInfo> Get(int id)
         {
             var hashInfo = hashService.GetHashInfo(id.ToString());
+            
+            if (hashInfo.HashValue == null)
+                return new NotFoundResult();
+            
             return hashInfo;
         }
-
-//        [HttpGet("{id}")]
-//        public ActionResult<string> Get(int id)
-//        {
-////            var hashInfo = hashService.GetHashInfo(id.ToString());
-//            return "hash";
-//        }
 
     }
     
