@@ -67,7 +67,7 @@ namespace MCMSPasswordValidator
                     var locationArgument = command.Argument("[sourcefile]",
                         "The sourcefile to use for populating the service's database.");
 
-                    var recordCountOption = command.Option("-rc|--rc <true/false>",
+                    var recordCountOption = command.Option("-rc|--rc <integer-value>",
                         "Overwrite an existing database.",
                         CommandOptionType.SingleValue);
 
