@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace MCMSPasswordValidator.Utilities
+namespace PasswordValidatorService.Utilities
 {
     
     public class FileParser

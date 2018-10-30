@@ -1,10 +1,9 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using System.IO;
 using FirebirdSql.Data.FirebirdClient;
-using MCMSPasswordValidator.DTO;
+using PasswordValidatorService.DTO;
 
-namespace MCMSPasswordValidator.Utilities
+namespace PasswordValidatorService.Utilities
 {
     
     public class DatabaseHelper

@@ -1,6 +1,6 @@
 using System;
 
-namespace MCMSPasswordValidator.DTO
+namespace PasswordValidatorService.DTO
 {
     public class HashInfo
     {

@@ -1,7 +1,7 @@
-using MCMSPasswordValidator.DTO;
-using MCMSPasswordValidator.Utilities;
+using PasswordValidatorService.DTO;
+using PasswordValidatorService.Utilities;
 
-namespace MCMSPasswordValidator.Services
+namespace PasswordValidatorService.Services
 {
     public class HashService
     {

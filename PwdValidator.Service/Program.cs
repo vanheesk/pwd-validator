@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using MCMSPasswordValidator.Utilities;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.CommandLineUtils;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using PasswordValidatorService.Utilities;
 
-namespace MCMSPasswordValidator
+namespace PasswordValidatorService
 {
     
     public class Program

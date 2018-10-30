@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace MCMSPasswordValidator.Utilities
+namespace PasswordValidatorService.Utilities
 {
     public class ConfigurationHelper
     {

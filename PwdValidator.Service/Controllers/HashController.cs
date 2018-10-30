@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MCMSPasswordValidator.DTO;
-using MCMSPasswordValidator.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using PasswordValidatorService.DTO;
+using PasswordValidatorService.Services;
 
-namespace MCMSPasswordValidator.Controllers
+namespace PasswordValidatorService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
