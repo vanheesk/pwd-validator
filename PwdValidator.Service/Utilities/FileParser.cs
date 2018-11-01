@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace PasswordValidatorService.Utilities
 {
@@ -27,6 +28,7 @@ namespace PasswordValidatorService.Utilities
                     line = line.Trim();
                     var array = line.Split(':');
 
+                    Console.WriteLine(array[0]);
                     DatabaseHelper.Instance.InsertPasswordHash(array[0], array[1]);
                     
                     if (currentCounter > recordCount)

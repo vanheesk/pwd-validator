@@ -108,7 +108,7 @@ namespace PasswordValidatorService.Utilities
             
             var hashInfo = new HashInfo();
 
-            sqlStatement = $"SELECT hash, countOccurrence FROM PasswordHash WHERE hash = '{hashValue}'";
+            sqlStatement = $"SELECT hash, countOccurrence FROM PasswordHash WHERE hash = \"{hashValue}\"";
 
             cmd.CommandText = sqlStatement;
             using (var reader = cmd.ExecuteReader())
