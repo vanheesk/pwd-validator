@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.IO;
 using FirebirdSql.Data.FirebirdClient;
 using PasswordValidatorService.DTO;
@@ -86,6 +87,8 @@ namespace PasswordValidatorService.Utilities
         {
             if (dbConnection.State == ConnectionState.Closed)
                 dbConnection.Open();
+
+            cmd = new FbCommand {Connection = dbConnection};
         }
 
         public void CloseConnection()
@@ -108,7 +111,7 @@ namespace PasswordValidatorService.Utilities
             
             var hashInfo = new HashInfo();
 
-            sqlStatement = $"SELECT hash, countOccurrence FROM PasswordHash WHERE hash = \"{hashValue}\"";
+            sqlStatement = $"SELECT * FROM PasswordHash WHERE hash = '{hashValue}'";
 
             cmd.CommandText = sqlStatement;
             using (var reader = cmd.ExecuteReader())
@@ -116,7 +119,7 @@ namespace PasswordValidatorService.Utilities
                 if (reader.Read())
                 {
                     hashInfo.HashValue = reader.GetValue(0).ToString();
-                    hashInfo.Count = (short) reader.GetValue(1);
+                    hashInfo.Count = (int)reader.GetValue(1);
                 }
             }
             

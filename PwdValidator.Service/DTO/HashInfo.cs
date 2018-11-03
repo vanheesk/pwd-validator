@@ -7,7 +7,7 @@ namespace PasswordValidatorService.DTO
         
         public string HashValue { get; set; }
         
-        public Int16 Count { get; set; }
+        public int Count { get; set; }
         
     }
 }
