@@ -75,7 +75,7 @@ namespace PasswordValidatorService.Utilities
 
         private void CreateTables()
         {
-            sqlStatement = "CREATE TABLE PasswordHash (hash varchar(50) NOT NULL, countOccurrence int NOT NULL)";
+            sqlStatement = "CREATE TABLE PasswordHash (hash varchar(50) NOT NULL primary key, countOccurrence int NOT NULL)";
 
             OpenConnection();
             

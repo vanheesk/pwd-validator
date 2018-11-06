@@ -28,7 +28,12 @@ namespace PasswordValidatorService.Utilities
                     line = line.Trim();
                     var array = line.Split(':');
 
-                    Console.WriteLine(array[0]);
+                    if (currentCounter == 1)
+                        Console.WriteLine($"First hash value found: {array[0]}");
+                    
+                    if (currentCounter % 100000 == 0)
+                        Console.WriteLine($"Records inserted: {currentCounter} at {DateTime.Now}");
+                    
                     DatabaseHelper.Instance.InsertPasswordHash(array[0], array[1]);
                     
                     if (currentCounter > recordCount)
