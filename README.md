@@ -1,6 +1,5 @@
 # pwd-validator
 A password validator service based on the HaveIBeenPwned datadump using an embedded Firebird as datasource.
-Important note: this is not meant for production purposes! 
 
 ## Included features
 * Validate the SHA1 hash of a string against the list of breached passwords
