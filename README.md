@@ -1,4 +1,4 @@
-# pwd-validator
+# pwd-validator-firebird
 A password validator service based on the HaveIBeenPwned datadump using an embedded Firebird as datasource.
 
 ## Included features
