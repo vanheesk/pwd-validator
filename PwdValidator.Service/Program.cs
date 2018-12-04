@@ -65,13 +65,20 @@ namespace PasswordValidatorService
                         "Overwrite an existing database.",
                         CommandOptionType.SingleValue);
 
+                    var minimalOccurenceCountOption = command.Option("-m|--min <integer-value>",
+                        "Minimal amount of occurenced required to be considered 'unsafe'",
+                        CommandOptionType.SingleValue);
+
                     command.OnExecute(() =>
                     {
                         var sourceFile = locationArgument.Values[0];
                         var numberOfRecordsToImport = recordCountOption.HasValue()
                             ? Convert.ToInt32(recordCountOption.Value())
                             : int.MaxValue;
-                        ActionPopulate(sourceFile, numberOfRecordsToImport);
+                        var minimalOccurenceCount = minimalOccurenceCountOption.HasValue()
+                            ? Convert.ToInt32(minimalOccurenceCountOption.Value())
+                            : 1;
+                        ActionPopulate(sourceFile, numberOfRecordsToImport, minimalOccurenceCount);
 
                         return 0;
                     });
@@ -117,13 +124,17 @@ namespace PasswordValidatorService
         /// <summary>
         /// Check the arguments passed in match a request to populate a database based on the provided textfile
         /// </summary>
-        private static void ActionPopulate(string sourceFile, int numberOfRecordsToImport = int.MaxValue)
+        private static void ActionPopulate(string sourceFile, int numberOfRecordsToImport = int.MaxValue, int minimalOccurenceCount = 1)
         {
             Console.WriteLine(numberOfRecordsToImport == int.MaxValue
                 ? $"Populate DB requested without record limit"
                 : $"Populate DB requested with option recordcount set to {numberOfRecordsToImport}");
 
-            new FileParser().Parse(sourceFile, numberOfRecordsToImport);
+            Console.WriteLine(minimalOccurenceCount == 1
+                ? $"Minimal occurence count set to include all"
+                : $"Minimal occurence count set to {minimalOccurenceCount}");
+
+            new FileParser().Parse(sourceFile, numberOfRecordsToImport, minimalOccurenceCount);
         }
 
         /// <summary>

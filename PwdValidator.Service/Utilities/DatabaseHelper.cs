@@ -97,7 +97,7 @@ namespace PasswordValidatorService.Utilities
                 dbConnection.Close();
         }
 
-        public void InsertPasswordHash(string hashValue, string countOccurrences)
+        public void InsertPasswordHash(string hashValue, int countOccurrences)
         {
             sqlStatement = $"INSERT INTO PasswordHash (hash, countOccurrence) VALUES ('{hashValue}', {countOccurrences})";
 
