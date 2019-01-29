@@ -28,7 +28,7 @@ namespace PasswordValidatorService
             try
             {
                 var app = new CommandLineApplication();
-                app.Name = "FES.PasswordValidator";
+                app.Name = "ARKE.PasswordValidator";
                 app.Description = ".NET Core console app allowing to validate password security.";
 
                 app.HelpOption("-?|-h|--help");
