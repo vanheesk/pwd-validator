@@ -13,14 +13,14 @@ namespace PasswordValidatorService
         {
             Console.WriteLine($"Application started at {DateTime.Now}");
 
-            // Initialize the configuration class
+            // Setup Configuration
             ConfigurationHelper.Instance().Init(args);
+            FileLogger.Write(LogLevel.INFO, "Running on {OS}", new []{ ConfigurationHelper.Instance().GetValue("OS") });
 
-            Console.WriteLine($"Running on {ConfigurationHelper.Instance().GetValue("OS")}");
-
+            // Setup Application Options
             SetupConsoleApplicationOptions(args);
-                        
-            Console.WriteLine($"Application stopped at {DateTime.Now}...");
+            
+            FileLogger.Write(LogLevel.INFO, "Application stopped...");
         }
 
         private static void SetupConsoleApplicationOptions(string[] args)
