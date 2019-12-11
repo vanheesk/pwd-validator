@@ -1,3 +1,4 @@
+using System;
 using Serilog;
 
 namespace PasswordValidatorService.Utilities
@@ -12,7 +13,7 @@ namespace PasswordValidatorService.Utilities
                 .CreateLogger();
         }
 
-        public static void Write(LogLevel logLevel, string messageTemplate, object[] values = null)
+        public static void Write(LogLevel logLevel, string messageTemplate, object[] values = null, bool writeToConsole = false)
         {
             switch (logLevel)
             {
@@ -34,7 +35,10 @@ namespace PasswordValidatorService.Utilities
                 case LogLevel.VERBOSE:
                     Log.Verbose(messageTemplate, values);
                     break;
-            }            
+            }
+
+            if (writeToConsole)
+                System.Console.WriteLine(string.Format(messageTemplate, values));
         }
     }
 
