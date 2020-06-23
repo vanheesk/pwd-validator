@@ -1,5 +1,5 @@
-using PasswordValidatorService.DTO;
 using PasswordValidatorService.Utilities;
+using PwdValidator.Service.Responses;
 
 namespace PasswordValidatorService.Services
 {

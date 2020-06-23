@@ -1,6 +1,4 @@
-using System;
-
-namespace PasswordValidatorService.DTO
+namespace PwdValidator.Service.Responses
 {
     public class HashInfo
     {

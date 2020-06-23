@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PasswordValidatorService.DTO;
 using PasswordValidatorService.Services;
+using PwdValidator.Service.Responses;
 
 namespace PasswordValidatorService.Controllers
 {
-    [Route("api/[controller]")]
+
     [ApiController]
+    [Route("api/[controller]")]
     public class HashController : ControllerBase
     {
 

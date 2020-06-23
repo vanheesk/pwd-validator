@@ -2,7 +2,7 @@
 using System.Data;
 using System.IO;
 using FirebirdSql.Data.FirebirdClient;
-using PasswordValidatorService.DTO;
+using PwdValidator.Service.Responses;
 
 namespace PasswordValidatorService.Utilities
 {
