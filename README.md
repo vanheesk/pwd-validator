@@ -1,6 +1,6 @@
-# pwd-validator-firebird
+# pwd-validator
 
-A sample password validator service based on the HaveIBeenPwned datadump using an embedded Firebird as datasource.
+A sample password validator service based on the HaveIBeenPwned datadump using a SQLServer or SQLite as datasource for storing the data.
 
 ## Included features
 
@@ -10,24 +10,20 @@ A sample password validator service based on the HaveIBeenPwned datadump using a
 ## Planned features
 
 * Track the unsafe passwords requested against the store.
-* Allow downloading a report with (unsafe) requests made
+* Allow downloading an overview of (unsafe) requests made
 
 ## Technologies
 
 * .NET
-* Firebird DB
+* RepoDB (SQLServer, SQLite)
+* DbUp
 * NPOI
 * Microsoft Extensions CommandLineUtils
+* Serilog
 
 ## State of Project
 
-Working, but too slow to be of use in a real production environment. 
-(e.g. with 10 million rows inserted, a lookup takes around 17 seconds to complete)
-
-## Features to be added
-
-* Entity Framework, Dabber, DbUp
-* Serilog
+In development
 
 ## Usage
 
@@ -42,8 +38,6 @@ To populate the database based on records read from the HaveIBeenPwned use this:
 To run as a REST API service: 
 `service`
 
-## Developer Setup
+## Prerequisites
 
-1. Download the latest version of Firebird Embedded SQL from: https://www.firebirdsql.org/manual/ufb-cs-embedded.html.
-2. Unzip and store the files in the Firebird folder found within the PwdValidator.Service/Services folder
-3. Make sure the contents of the folder are added to the .gitignore file (this should already have been the case)
+- A datadump file as provided by HaveIBeenPwned website (https://haveibeenpwned.com)
