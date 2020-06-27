@@ -17,8 +17,6 @@ A sample password validator service based on the HaveIBeenPwned datadump using a
 * .NET
 * RepoDB (SQLServer, SQLite)
 * DbUp
-* NPOI
-* Microsoft Extensions CommandLineUtils
 * Serilog
 
 ## State of Project
