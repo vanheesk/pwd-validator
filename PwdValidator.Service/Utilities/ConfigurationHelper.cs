@@ -13,7 +13,7 @@ namespace PasswordValidatorService.Utilities
 
         public static ConfigurationHelper Instance()
         {
-            _instance = _instance ?? new ConfigurationHelper();
+            _instance ??= new ConfigurationHelper();
             return _instance;
         }
         

@@ -1,9 +1,16 @@
 ﻿using System;
+using System.Configuration;
 using System.Globalization;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.CommandLineUtils;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using PasswordValidatorService.Utilities;
+using PwdValidator.Service;
+using PwdValidator.Service.Actions;
+using PwdValidator.Service.Utilities;
 
 namespace PasswordValidatorService
 {
@@ -50,6 +57,23 @@ namespace PasswordValidatorService
             }
         }
 
+        /// <summary>
+        /// Check the arguments passed in match a request to populate a database based on the provided textfile
+        /// </summary>
+        private static void ActionPopulate(string sourceFile, int numberOfRecordsToImport = int.MaxValue, int minimalOccurenceCount = 1)
+        {
+            FileLogger.Write(LogLevel.INFO, numberOfRecordsToImport == int.MaxValue
+                ? $"Populate DB requested without record limit"
+                : $"Populate DB requested with option recordcount set to {numberOfRecordsToImport}");
+            
+            FileLogger.Write(LogLevel.INFO, minimalOccurenceCount == 1
+                ? $"Minimal occurence count set to include all"
+                : $"Minimal occurence count set to {minimalOccurenceCount}");
+            
+            var runner = new ActionPopulateDb();
+            runner.Execute(new string[] { sourceFile, numberOfRecordsToImport.ToString(), minimalOccurenceCount.ToString()});
+        }
+
         private static void CreateCommandForSetupAction(CommandLineApplication app)
         {
             app.Command("setup", (command) =>
@@ -85,11 +109,11 @@ namespace PasswordValidatorService
                     "The sourcefile to use for populating the service's database.");
 
                 var recordCountOption = command.Option("-rc|--rc <integer-value>",
-                    "Overwrite an existing database.",
+                    "Number of records to import. If no value is specified, all data will be imported.",
                     CommandOptionType.SingleValue);
 
                 var minimalOccurenceCountOption = command.Option("-m|--min <integer-value>",
-                    "Minimal amount of occurenced required to be considered 'unsafe'",
+                    "Minimum prevalence counter required to be considered 'unsafe'",
                     CommandOptionType.SingleValue);
 
                 command.OnExecute(() =>
@@ -128,32 +152,16 @@ namespace PasswordValidatorService
             
             FileLogger.Write(LogLevel.DEBUG, "Finished creating command [run-as-service].");
         }
-        
+
         /// <summary>
         /// Check the arguments passed in match a request to setup a database 
         /// </summary>
         private static void ActionSetup(bool overwrite)
         {                         
             FileLogger.Write(LogLevel.INFO, $"Setup requested with option overwrite set to {overwrite}");
-                
-            // Create (if not exists) the firebird embedded database (or overwrite is specified as argument)
-            DatabaseHelper.Instance.CreateDatabase(overwrite);
-        }
 
-        /// <summary>
-        /// Check the arguments passed in match a request to populate a database based on the provided textfile
-        /// </summary>
-        private static void ActionPopulate(string sourceFile, int numberOfRecordsToImport = int.MaxValue, int minimalOccurenceCount = 1)
-        {
-            FileLogger.Write(LogLevel.INFO, numberOfRecordsToImport == int.MaxValue
-                ? $"Populate DB requested without record limit"
-                : $"Populate DB requested with option recordcount set to {numberOfRecordsToImport}");
-
-            FileLogger.Write(LogLevel.INFO, minimalOccurenceCount == 1
-                ? $"Minimal occurence count set to include all"
-                : $"Minimal occurence count set to {minimalOccurenceCount}");
-
-            new FileParser().Parse(sourceFile, numberOfRecordsToImport, minimalOccurenceCount);
+            var runner = new ActionSetupDb();
+            runner.Execute();
         }
 
         /// <summary>
@@ -169,6 +177,10 @@ namespace PasswordValidatorService
         private static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>();
+        
+        private static IHostBuilder CreateHostBuilder<T> (string[] args) where T : class, IHostedService =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureServices((hostContext, services) => { services.AddHostedService<T>(); });
     }
     
 }

@@ -1,7 +1,6 @@
-using System;
 using Serilog;
 
-namespace PasswordValidatorService.Utilities
+namespace PwdValidator.Service.Utilities
 {
     
     public static class FileLogger
