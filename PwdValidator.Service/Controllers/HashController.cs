@@ -23,11 +23,11 @@ namespace PasswordValidatorService.Controllers
         /// <param name="id">The hash value to lookup</param>
         /// <returns>A response message</returns>
         [HttpGet("{id}")]
-        public ActionResult<HashInfo> Get(string id)
+        public ActionResult<Hash> Get(string id)
         {
             var hashInfo = hashService.GetHashInfo(id);
             
-            if (hashInfo.HashValue == null)
+            if (hashInfo.Value == null)
                 return new NotFoundResult();
             
             return hashInfo;
