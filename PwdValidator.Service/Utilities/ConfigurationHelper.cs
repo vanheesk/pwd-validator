@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace PasswordValidatorService.Utilities
+namespace PwdValidator.Service.Utilities
 {
     public class ConfigurationHelper
     {

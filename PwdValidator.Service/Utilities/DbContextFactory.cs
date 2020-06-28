@@ -1,7 +1,6 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.SQLite;
-using PasswordValidatorService.Utilities;
 using RepoDb;
 
 namespace PwdValidator.Service.Utilities

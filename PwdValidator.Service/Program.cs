@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Configuration;
 using System.Globalization;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.CommandLineUtils;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PasswordValidatorService.Utilities;
-using PwdValidator.Service;
 using PwdValidator.Service.Actions;
 using PwdValidator.Service.Utilities;
 
-namespace PasswordValidatorService
+namespace PwdValidator.Service
 {
     
     public class Program
