@@ -25,10 +25,12 @@ namespace PwdValidator.Service.Utilities
 
         public IDbConnection GetConnection()
         {
+            RepoDb.SqlServerBootstrap.Initialize();
+
             var connectionString = ConfigurationHelper.Instance().GetValue("database:SQLServer:ConnectionString");
             
             DbSettingMapper.Add(typeof(SqlConnection), new SqlServerDbSetting(), true);
-            return new SqlConnection(connectionString);
+            return new SqlConnection(connectionString).EnsureOpen();
             
             // return connectionDb.ToUpper() switch
             // {
