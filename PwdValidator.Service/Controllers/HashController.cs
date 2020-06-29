@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PasswordValidatorService.Services;
 using PwdValidator.Service.Responses;
+using PwdValidator.Service.Services;
 
-namespace PasswordValidatorService.Controllers
+namespace PwdValidator.Service.Controllers
 {
 
     [ApiController]

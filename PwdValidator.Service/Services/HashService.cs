@@ -1,10 +1,9 @@
 using System.Linq;
-using PasswordValidatorService.Utilities;
 using PwdValidator.Service.Responses;
 using PwdValidator.Service.Utilities;
 using RepoDb;
 
-namespace PasswordValidatorService.Services
+namespace PwdValidator.Service.Services
 {
     public class HashService
     {
