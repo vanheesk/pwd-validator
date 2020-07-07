@@ -9,9 +9,14 @@ namespace PwdValidator.Service.Services
     {
         public Hash GetHashInfo(string hashValue)
         {
-            return DbContextFactory.GetInstance().GetConnection()
+            var connection = DbContextFactory.GetInstance().GetConnection();
+
+            var result= connection?
                 .Query<Hash>(h => h.Value == hashValue)
                 .FirstOrDefault();
+                
+            return result;
+
         }
     }
 }

@@ -3,37 +3,66 @@ using System.Globalization;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.CommandLineUtils;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PwdValidator.Service.Actions;
 using PwdValidator.Service.Utilities;
+using Serilog;
 
 namespace PwdValidator.Service
 {
     
     public class Program
     {
+        public static IConfiguration Configuration;
+        
         public static void Main(string[] args)
         {
-            FileLogger.Write(LogLevel.INFO, "Application started at {0})", new object[] {DateTime.Now.ToString(CultureInfo.InvariantCulture)}, true);
+            Console.WriteLine("Application started at {0})", new object[] {DateTime.Now.ToString(CultureInfo.InvariantCulture)});
             
-            // Setup Configuration
-            ConfigurationHelper.Instance().Init(args);
-            FileLogger.Write(LogLevel.INFO, "Running on {0}", new object[]{ ConfigurationHelper.Instance().GetValue("OS") });
+            InitializeConfiguration(args);
+            InitializeLogger();
+            
+            Log.Information("Running on {0}", new object[]{ Configuration["OS"] });
 
             // Setup Application Options
             SetupConsoleApplicationOptions(args);
             
-            FileLogger.Write(LogLevel.INFO, "Application stopped...");
+            Log.Information("Application stopped...");
         }
 
+        /// <summary>
+        /// Initializes the configuration so we can easily work with any of the information in either settings-file
+        /// or passed in through command-line options.
+        /// </summary>
+        /// <param name="args">Command-line options</param>
+        private static void InitializeConfiguration(string[] args)
+        {
+            Configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .AddEnvironmentVariables()
+                .AddCommandLine(args)
+                .Build();
+        }
+        
+        /// <summary>
+        /// Creates the logging component based on settings specified in the appsettings.json file.
+        /// </summary>
+        private static void InitializeLogger()
+        {
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(Configuration)
+                .CreateLogger();
+        }
+        
         private static void SetupConsoleApplicationOptions(string[] args)
         {
             try
             {
                 var app = new CommandLineApplication();
-                app.Name = "ARKE.PasswordValidator";
-                app.Description = ".NET Core console app allowing to validate password security.";
+                app.Name = "ARKE.Password-Validator";
+                app.Description = "Password validator based on the HaveIBeenPwned database.";
 
                 app.HelpOption("-?|-h|--help");
                 
@@ -53,25 +82,10 @@ namespace PwdValidator.Service
             }
         }
 
-        /// <summary>
-        /// Check the arguments passed in match a request to populate a database based on the provided textfile
-        /// </summary>
-        private static void ActionPopulate(string sourceFile, int numberOfRecordsToImport = int.MaxValue, int minimalOccurenceCount = 1)
-        {
-            FileLogger.Write(LogLevel.INFO, numberOfRecordsToImport == int.MaxValue
-                ? $"Populate DB requested without record limit"
-                : $"Populate DB requested with option recordcount set to {numberOfRecordsToImport}");
-            
-            FileLogger.Write(LogLevel.INFO, minimalOccurenceCount == 1
-                ? $"Minimal occurence count set to include all"
-                : $"Minimal occurence count set to {minimalOccurenceCount}");
-            
-            var runner = new ActionPopulateDb();
-            runner.Execute(new string[] { sourceFile, numberOfRecordsToImport.ToString(), minimalOccurenceCount.ToString()});
-        }
-
         private static void CreateCommandForSetupAction(CommandLineApplication app)
         {
+            Log.Verbose("Start creating command [setup].");
+            
             app.Command("setup", (command) =>
             {
                 command.Description = "Performs the SETUP step which initializes the embedded database";
@@ -83,18 +97,19 @@ namespace PwdValidator.Service
 
                 command.OnExecute(() =>
                 {
-                    var overwriteExisting = overwriteOption.HasValue() && Convert.ToBoolean(overwriteOption.Value());
-                    ActionSetup(overwriteExisting);
-
+                    var overwrite = overwriteOption.HasValue() && Convert.ToBoolean(overwriteOption.Value());
+                    ActionBuilder.Execute<ActionSetupDb>(new string[] { overwrite.ToString() });
                     return 0;
                 });
             });
             
-            FileLogger.Write(LogLevel.DEBUG, "Finished creating command [setup].");
+            Log.Verbose("Finished creating command [setup].");
         }
 
         private static void CreateCommandForPopulateAction(CommandLineApplication app)
         {
+            Log.Verbose("Start creating command [populate].");
+            
             app.Command("populate", (command) =>
             {
                 command.Description =
@@ -121,17 +136,19 @@ namespace PwdValidator.Service
                     var minimalOccurenceCount = minimalOccurenceCountOption.HasValue()
                         ? Convert.ToInt32(minimalOccurenceCountOption.Value())
                         : 1;
-                    ActionPopulate(sourceFile, numberOfRecordsToImport, minimalOccurenceCount);
-
+                    
+                    ActionBuilder.Execute<ActionPopulateDb>(new string[] { sourceFile, numberOfRecordsToImport.ToString(), minimalOccurenceCount.ToString() });
                     return 0;
                 });
             });
             
-            FileLogger.Write(LogLevel.DEBUG, "Finished creating command [populate].");
+            Log.Verbose( "Finished creating command [populate].");
         }
 
         private static void CreateCommandForRunAsServiceAction(CommandLineApplication app)
         {
+            Log.Verbose("Start creating command [run-as-service].");
+            
             app.Command("service", (command) =>
             {
                 command.Description =
@@ -140,43 +157,14 @@ namespace PwdValidator.Service
 
                 command.OnExecute(() =>
                 {
-                    ActionRunAsService();
-
+                    ActionBuilder.Execute<ActionRunAsService>(null);
                     return 0;
                 });
             });
             
-            FileLogger.Write(LogLevel.DEBUG, "Finished creating command [run-as-service].");
+            Log.Verbose("Finished creating command [run-as-service].");
         }
 
-        /// <summary>
-        /// Check the arguments passed in match a request to setup a database 
-        /// </summary>
-        private static void ActionSetup(bool overwrite)
-        {                         
-            FileLogger.Write(LogLevel.INFO, $"Setup requested with option overwrite set to {overwrite}");
-
-            var runner = new ActionSetupDb();
-            runner.Execute();
-        }
-
-        /// <summary>
-        /// Check the arguments passed in match a request to run the application as an API service
-        /// </summary>
-        private static void ActionRunAsService()
-        {
-            FileLogger.Write(LogLevel.INFO, $"Run as service requested");
-            
-            CreateWebHostBuilder(new string[0]).Build().Run();
-        }
-
-        private static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
-        
-        private static IHostBuilder CreateHostBuilder<T> (string[] args) where T : class, IHostedService =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureServices((hostContext, services) => { services.AddHostedService<T>(); });
     }
     
 }

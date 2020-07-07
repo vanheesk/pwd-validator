@@ -1,6 +1,8 @@
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Data.SQLite;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Configuration;
 using RepoDb;
 
 namespace PwdValidator.Service.Utilities
@@ -11,8 +13,12 @@ namespace PwdValidator.Service.Utilities
         private static DbContextFactory _instance;
 
         private DbContextFactory()
-        { }
-
+        {
+            RepoDb.SqlServerBootstrap.Initialize();
+        }
+        
+        public IConfiguration Configuration { get; set; }
+        
         public static DbContextFactory GetInstance()
         {
             if (_instance == null)
@@ -25,9 +31,7 @@ namespace PwdValidator.Service.Utilities
 
         public IDbConnection GetConnection()
         {
-            RepoDb.SqlServerBootstrap.Initialize();
-
-            var connectionString = ConfigurationHelper.Instance().GetValue("database:SQLServer:ConnectionString");
+            var connectionString = Configuration["database:SQLServer:ConnectionString"];
             
             DbSettingMapper.Add(typeof(SqlConnection), new SqlServerDbSetting(), true);
             return new SqlConnection(connectionString).EnsureOpen();
