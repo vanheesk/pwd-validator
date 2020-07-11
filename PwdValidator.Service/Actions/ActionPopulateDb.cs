@@ -28,6 +28,7 @@ namespace PwdValidator.Service.Actions
                 ? $"Minimal occurence count set to include all"
                 : $"Minimal occurence count set to {args[2]}");
             
+            DbContextFactory.GetInstance().Configuration = Configuration;
             new BatchReader().Read(args[0], Convert.ToInt32(args[1]), Convert.ToInt32(args[2])); }
     }
 }
