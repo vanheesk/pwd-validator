@@ -18,17 +18,19 @@ namespace PwdValidator.Service.Actions
                 .Build();   
         }
 
-        public void Execute(string[] args)
+        public void Execute(IActionOptions options)
         {
-            Log.Information(args[1] == int.MaxValue.ToString()
-                ? $"Populate DB requested without record limit"
-                : $"Populate DB requested with option recordcount set to {args[1]}");
+            var actionOptions = (ActionPopulateDbOptions) options;
             
-            Log.Information(args[2] == "1"
+            Log.Information(actionOptions.Limit == int.MaxValue
+                ? $"Populate DB requested without record limit"
+                : $"Populate DB requested with option recordcount set to {actionOptions.Limit}");
+            
+            Log.Information(actionOptions.MinPrevalance == Constants.DEFAULT_MIN_PREVALENCE
                 ? $"Minimal occurence count set to include all"
-                : $"Minimal occurence count set to {args[2]}");
+                : $"Minimal occurence count set to {actionOptions.MinPrevalance}");
             
             DbContextFactory.GetInstance().Configuration = Configuration;
-            new BatchReader().Read(args[0], Convert.ToInt32(args[1]), Convert.ToInt32(args[2])); }
+            new BatchReader().Read(actionOptions); }
     }
 }

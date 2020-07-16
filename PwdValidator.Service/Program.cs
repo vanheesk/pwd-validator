@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Globalization;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
+using System.IO;
 using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using PwdValidator.Service.Actions;
-using PwdValidator.Service.Utilities;
+using PwdValidator.Service.Exceptions;
 using Serilog;
 
 namespace PwdValidator.Service
@@ -65,20 +62,23 @@ namespace PwdValidator.Service
                 app.Description = "Password validator based on the HaveIBeenPwned database.";
 
                 app.HelpOption("-?|-h|--help");
-                
+
                 CreateCommandForSetupAction(app);
                 CreateCommandForPopulateAction(app);
                 CreateCommandForRunAsServiceAction(app);
 
                 app.Execute(args);
             }
-            catch (CommandParsingException cpe)
+            catch (Exception exception) 
+                when (exception is CommandParsingException || 
+                      exception is MissingArgumentException ||
+                      exception is FileNotFoundException)
             {
-                Console.WriteLine(cpe.Message);
+                Console.WriteLine(exception.Message);
             }
-            catch (Exception e)
+            catch (Exception unknownEx)
             {
-                Console.WriteLine($"Unknown exception: {e}");
+                Console.WriteLine($"Unknown exception: {unknownEx}");
             }
         }
 
@@ -98,7 +98,7 @@ namespace PwdValidator.Service
                 command.OnExecute(() =>
                 {
                     var overwrite = overwriteOption.HasValue() && Convert.ToBoolean(overwriteOption.Value());
-                    ActionBuilder.Execute<ActionSetupDb>(new string[] { overwrite.ToString() });
+                    ActionBuilder.Execute<ActionSetupDb>(new ActionSetupDbOptions() { Overwrite = overwrite });
                     return 0;
                 });
             });
@@ -127,17 +127,39 @@ namespace PwdValidator.Service
                     "Minimum prevalence counter required to be considered 'unsafe'",
                     CommandOptionType.SingleValue);
 
+                var startFromOption = command.Option("-s|--start-from <integer-value>",
+                    "Row-number to start importing from",
+                    CommandOptionType.SingleValue);
+
+                var ignoreDuplicateExceptionOption = command.Option("-id|--ignore-duplicates",
+                    "Choose whether to ignore duplication exceptions from the database", 
+                    CommandOptionType.SingleValue);
+                
                 command.OnExecute(() =>
                 {
+                    if (locationArgument.Values == null || locationArgument.Values.Count == 0)
+                        throw new MissingArgumentException("Source-file not specified or invalid...");
                     var sourceFile = locationArgument.Values[0];
+                    
                     var numberOfRecordsToImport = recordCountOption.HasValue()
                         ? Convert.ToInt32(recordCountOption.Value())
                         : int.MaxValue;
                     var minimalOccurenceCount = minimalOccurenceCountOption.HasValue()
                         ? Convert.ToInt32(minimalOccurenceCountOption.Value())
-                        : 1;
+                        : Constants.DEFAULT_MIN_PREVALENCE;
+                    var startFrom = startFromOption.HasValue() 
+                        ? Convert.ToInt32(startFromOption.Value()) 
+                        : 0;
+                    var ignoreDuplicates = ignoreDuplicateExceptionOption.HasValue() && Convert.ToBoolean(ignoreDuplicateExceptionOption.Value());
                     
-                    ActionBuilder.Execute<ActionPopulateDb>(new string[] { sourceFile, numberOfRecordsToImport.ToString(), minimalOccurenceCount.ToString() });
+                    ActionBuilder.Execute<ActionPopulateDb>( new ActionPopulateDbOptions()
+                    {
+                        Source = sourceFile,
+                        IgnoreDuplicates = ignoreDuplicates,
+                        Limit = numberOfRecordsToImport,
+                        MinPrevalance = minimalOccurenceCount,
+                        StartFromRow = startFrom
+                    });
                     return 0;
                 });
             });

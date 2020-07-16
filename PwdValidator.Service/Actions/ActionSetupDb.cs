@@ -18,9 +18,10 @@ namespace PwdValidator.Service.Actions
                 .Build();   
         }
 
-        public void Execute(string[] args)
+        public void Execute(IActionOptions options)
         {
-            Log.Information($"Setup requested with option overwrite set to {args[0]}");
+            var actionOptions = (ActionSetupDbOptions) options;
+            Log.Information($"Setup requested with option overwrite set to {actionOptions.Overwrite}");
             
             var ddl = new DbAdminFactory(Configuration);
             ddl.Generate();

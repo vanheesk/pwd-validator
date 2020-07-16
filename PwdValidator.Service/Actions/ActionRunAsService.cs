@@ -19,13 +19,13 @@ namespace PwdValidator.Service.Actions
                 .Build();   
         }
         
-        public void Execute(string[] args)
+        public void Execute(IActionOptions options)
         {
             Log.Information($"Run-as-service requested.");
 
             DbContextFactory.GetInstance().Configuration = Configuration;
             
-            WebHost.CreateDefaultBuilder(args)
+            WebHost.CreateDefaultBuilder(null)
                 .UseStartup<Startup>()   
                 .Build()
                 .Run();
