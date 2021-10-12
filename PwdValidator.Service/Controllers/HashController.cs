@@ -26,11 +26,7 @@ namespace PwdValidator.Service.Controllers
         public ActionResult<Hash> Get(string id)
         {
             var hashInfo = hashService.GetHashInfo(id);
-            
-            if (hashInfo.Value == null)
-                return new NotFoundResult();
-            
-            return hashInfo;
+            return hashInfo == null ? (ActionResult)NotFound() : Ok(hashInfo);
         }
 
     }

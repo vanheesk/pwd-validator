@@ -11,12 +11,13 @@ namespace PwdValidator.Service.Services
         {
             var connection = DbContextFactory.GetInstance().GetConnection();
 
-            var result= connection?
+            var result= connection
                 .Query<Hash>(h => h.Value == hashValue)
                 .FirstOrDefault();
                 
             return result;
-
         }
+        
     }
+    
 }

@@ -26,21 +26,30 @@ namespace PwdValidator.Service.Utilities
             using var bs = new BufferedStream(fs);
             using var sr = new StreamReader(bs);
             
+            // Create the variables to be used within the loop and make sure to only use a single allocation to increase performance.
             string line;
             string hash;
-            int prevalance;
+            int prevalence;
+            int indexSeparator;
+            
+            // Create additional boolean operators to increase performance
+            var shouldCheckStartingRow = options.StartFromRow != 1;
+            var hasMinimumPrevalence = options.MinPrevalance != Constants.DEFAULT_MIN_PREVALENCE;
+            var hasRowLimit = options.Limit != int.MaxValue;
+            
             while ((line = sr.ReadLine()) != null)
             {
                 lineCounter++;
 
                 // If we are below the row-number from which we are requested to import, continue with the next record
-                if (options.StartFromRow > lineCounter) continue;
+                if (shouldCheckStartingRow && options.StartFromRow > lineCounter) continue;
 
-                hash = line.Substring(0, line.IndexOf(":"));
-                prevalance = Convert.ToInt32(line.Substring(line.IndexOf(":") + 1));
+                indexSeparator = line.IndexOf(":", StringComparison.OrdinalIgnoreCase);
+                hash = line.Substring(0, indexSeparator);
+                prevalence = Convert.ToInt32(line.Substring(indexSeparator + 1));
 
                 // Don't bother with records that have a lower occurence then what we consider 'safe'
-                if (prevalance < options.MinPrevalance) continue;
+                if (hasMinimumPrevalence && prevalence < options.MinPrevalance) continue;
 
                 currentCounter++;
                 if (currentCounter % Constants.DEFAULT_WRITE_OUTPUT_AFTER_X_RECORDS == 0)
@@ -49,18 +58,10 @@ namespace PwdValidator.Service.Utilities
                     Console.WriteLine($"Records inserted: {currentCounter} at {DateTime.Now}");
                 }
 
-                try
-                {
-                    dbConnection.Insert(new Hash(hash, prevalance));
-                }
-                catch (Exception exception) when (exception is SqlException && options.IgnoreDuplicates)
-                {
-                    if (!exception.Message.Contains("duplicate key"))
-                        throw;
-                }
+                dbConnection.Insert(new Hash(hash, prevalence));
             
                 // If we have passed the requested number of records to import, then abort 
-                if (currentCounter > options.Limit) return;
+                if (hasRowLimit && currentCounter > options.Limit) return;
             }
         }
     }

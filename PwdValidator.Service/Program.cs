@@ -151,16 +151,27 @@ namespace PwdValidator.Service
                         ? Convert.ToInt32(startFromOption.Value()) 
                         : 0;
                     var ignoreDuplicates = ignoreDuplicateExceptionOption.HasValue() && Convert.ToBoolean(ignoreDuplicateExceptionOption.Value());
-                    
-                    ActionBuilder.Execute<ActionPopulateDb>( new ActionPopulateDbOptions()
+
+                    try
                     {
-                        Source = sourceFile,
-                        IgnoreDuplicates = ignoreDuplicates,
-                        Limit = numberOfRecordsToImport,
-                        MinPrevalance = minimalOccurenceCount,
-                        StartFromRow = startFrom
-                    });
-                    return 0;
+                        ActionBuilder.Execute<ActionPopulateDb>( new ActionPopulateDbOptions()
+                        {
+                            Source = sourceFile,
+                            IgnoreDuplicates = ignoreDuplicates,
+                            Limit = numberOfRecordsToImport,
+                            MinPrevalance = minimalOccurenceCount,
+                            StartFromRow = startFrom
+                        });
+                        
+                        return 0;
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error(e.ToString());
+                        Console.WriteLine(e.Message);
+                        
+                        return -1;
+                    }
                 });
             });
             
