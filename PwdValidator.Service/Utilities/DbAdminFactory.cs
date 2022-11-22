@@ -33,7 +33,7 @@ namespace PwdValidator.Service.Utilities
 
             if (!result.Successful)
             {
-                throw new Exception("Database creation failed...");
+                throw new Exception("Database create/update failed...");
             }
         }
         
