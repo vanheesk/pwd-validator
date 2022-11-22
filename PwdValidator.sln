@@ -1,6 +1,29 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PwdValidator.Service", "PwdValidator.Service\PwdValidator.Service.csproj", "{6891AF5B-2A86-4A11-895E-9391287EBAF9}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33027.239
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PwdValidator.Service", "PwdValidator.Service\PwdValidator.Service.csproj", "{6891AF5B-2A86-4A11-895E-9391287EBAF9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arke.PwdValidator.API.Web", "src\Arke.PwdValidator.API\Arke.PwdValidator.API.Web.csproj", "{DA10FA6F-E87E-4E78-9CEF-4B94B5073EA1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arke.PwdValidator.API.Infrastructure", "src\Arke.PwdValidator.API.Persistence\Arke.PwdValidator.API.Infrastructure.csproj", "{7DE6296A-65BF-4343-8A01-CE551ED20B49}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arke.PwdValidator.CLI", "src\Arke.PwdValidator.CLI\Arke.PwdValidator.CLI.csproj", "{5AD2239B-7C0D-4692-ABC5-93E95ACC45E0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Files", "Solution Files", "{C601D6EC-C83D-4610-BD9B-CCC73FBA1A77}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0C93791B-2DC3-4886-951F-F5540788A084}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arke.PwdValidator.API.Domain", "src\PwdValidator.API.Domain\Arke.PwdValidator.API.Domain.csproj", "{82C8F546-B89D-45B8-89DA-9979F2DF8788}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arke.PwdValidator.API.Application", "src\PwdValidator.API.Application\Arke.PwdValidator.API.Application.csproj", "{1B81EECA-84F9-4744-A569-42F3C0E3270C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arke.PwdValidator.Shared", "src\Arke.PwdValidator.Shared\Arke.PwdValidator.Shared.csproj", "{3EB3BAD3-E13D-4091-8B78-8208E1CCEEBE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +35,43 @@ Global
 		{6891AF5B-2A86-4A11-895E-9391287EBAF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6891AF5B-2A86-4A11-895E-9391287EBAF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6891AF5B-2A86-4A11-895E-9391287EBAF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA10FA6F-E87E-4E78-9CEF-4B94B5073EA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA10FA6F-E87E-4E78-9CEF-4B94B5073EA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA10FA6F-E87E-4E78-9CEF-4B94B5073EA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA10FA6F-E87E-4E78-9CEF-4B94B5073EA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DE6296A-65BF-4343-8A01-CE551ED20B49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DE6296A-65BF-4343-8A01-CE551ED20B49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DE6296A-65BF-4343-8A01-CE551ED20B49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DE6296A-65BF-4343-8A01-CE551ED20B49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5AD2239B-7C0D-4692-ABC5-93E95ACC45E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AD2239B-7C0D-4692-ABC5-93E95ACC45E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AD2239B-7C0D-4692-ABC5-93E95ACC45E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AD2239B-7C0D-4692-ABC5-93E95ACC45E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82C8F546-B89D-45B8-89DA-9979F2DF8788}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82C8F546-B89D-45B8-89DA-9979F2DF8788}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82C8F546-B89D-45B8-89DA-9979F2DF8788}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82C8F546-B89D-45B8-89DA-9979F2DF8788}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B81EECA-84F9-4744-A569-42F3C0E3270C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B81EECA-84F9-4744-A569-42F3C0E3270C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B81EECA-84F9-4744-A569-42F3C0E3270C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B81EECA-84F9-4744-A569-42F3C0E3270C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EB3BAD3-E13D-4091-8B78-8208E1CCEEBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EB3BAD3-E13D-4091-8B78-8208E1CCEEBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EB3BAD3-E13D-4091-8B78-8208E1CCEEBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EB3BAD3-E13D-4091-8B78-8208E1CCEEBE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DA10FA6F-E87E-4E78-9CEF-4B94B5073EA1} = {0C93791B-2DC3-4886-951F-F5540788A084}
+		{7DE6296A-65BF-4343-8A01-CE551ED20B49} = {0C93791B-2DC3-4886-951F-F5540788A084}
+		{5AD2239B-7C0D-4692-ABC5-93E95ACC45E0} = {0C93791B-2DC3-4886-951F-F5540788A084}
+		{82C8F546-B89D-45B8-89DA-9979F2DF8788} = {0C93791B-2DC3-4886-951F-F5540788A084}
+		{1B81EECA-84F9-4744-A569-42F3C0E3270C} = {0C93791B-2DC3-4886-951F-F5540788A084}
+		{3EB3BAD3-E13D-4091-8B78-8208E1CCEEBE} = {0C93791B-2DC3-4886-951F-F5540788A084}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DAD9F97C-5E62-4E34-BFEE-7AD00960932F}
 	EndGlobalSection
 EndGlobal
